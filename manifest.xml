@@ -1,0 +1,14 @@
+<package>
+  <description brief="hpp_wholebody_step_planner_bridge">
+
+     hpp_wholebody_step_planner_bridge
+
+  </description>
+  <author>Thomas Moulard</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hpp_wholebody_step_planner_bridge</url>
+
+</package>
+
+
