@@ -10,7 +10,7 @@
   <url>http://ros.org/wiki/hpp_wholebody_step_planner_bridge</url>
 
   <depend package="walk_msgs"/>
-  <depend package="walk_interface"/>
+  <depend package="walk_interfaces"/>
 
   <rosdep name="boost"/>
 
