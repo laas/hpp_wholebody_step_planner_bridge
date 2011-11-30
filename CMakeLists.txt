@@ -27,7 +27,8 @@ ADD_REQUIRED_DEPENDENCY("hpp-wholebody-step-planner")
 #rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
-#rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
+
+rosbuild_add_library(${PROJECT_NAME} src/pattern-generator.cc)
 
 PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen3)
 PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-gik)
