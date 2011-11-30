@@ -17,9 +17,22 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 rosbuild_add_boost_directories()
+ADD_REQUIRED_DEPENDENCY("eigen3")
+ADD_REQUIRED_DEPENDENCY("hpp-gik")
+ADD_REQUIRED_DEPENDENCY("hpp-wholebody-step-planner")
+
+#uncomment if you have defined messages
+#rosbuild_genmsg()
+#uncomment if you have defined services
+#rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
+
+PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen3)
+PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-gik)
+PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-wholebody-step-planner)
+
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 

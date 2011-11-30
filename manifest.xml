@@ -14,5 +14,7 @@
 
   <rosdep name="boost"/>
 
+  <rosdep name="eigen"/>
+  <rosdep name="hpp-gik"/>
   <rosdep name="hpp-wholebody-step-planner"/>
 </package>
