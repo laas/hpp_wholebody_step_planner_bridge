@@ -121,10 +121,9 @@ namespace hpp
 	* ankleTransformInFootFrame.inverse ();
     }
     
-    template <class T>
     void
     PatternGenerator::setRobotPosition
-    (const T& configuration,
+    (const vectorN& configuration,
      walk::HomogeneousMatrix3d& leftFootPosition,
      walk::HomogeneousMatrix3d& rightFootPosition,
      walk::Vector3d& centerOfMassPosition,
@@ -151,7 +150,7 @@ namespace hpp
       
       // Fill posture with additionnal dofs in upper body excluding the
       // free-flyer.
-      T ubMask = robot_->maskFactory ()->upperBodyMask ();
+      vectorN ubMask = robot_->maskFactory ()->upperBodyMask ();
 
       posture.resize (ubMask.size ());
       posture.setZero ();
@@ -161,9 +160,8 @@ namespace hpp
 	  posture[dofId] = configuration[dofId];
     }
       
-    template <class T>
     void 
-    PatternGenerator::setInitialRobotPosition (const T& configuration)
+    PatternGenerator::setInitialRobotPosition (const vectorN& configuration)
     {
       walk::HomogeneousMatrix3d leftFootPosition;
       walk::HomogeneousMatrix3d rightFootPosition;
@@ -183,9 +181,8 @@ namespace hpp
 	 posture);
     }
 
-    template <class T>
     void
-    PatternGenerator::setFinalRobotPosition (const T& configuration)
+    PatternGenerator::setFinalRobotPosition (const vectorN& configuration)
     {
       walk::HomogeneousMatrix3d leftFootPosition;
       walk::HomogeneousMatrix3d rightFootPosition;
@@ -204,17 +201,16 @@ namespace hpp
 						      posture);
     }
     
-    template <class T>
     void
     PatternGenerator::computeTrajectories ()
     {
       // Fill initial posture information.
-      const T initialConfiguration
+      vectorN initialConfiguration
 	= robotMotions_[0]->firstSample ()->configuration;
       setInitialRobotPosition (initialConfiguration);
 
       // Fill final posture information.
-      const T finalConfiguration
+      vectorN finalConfiguration
 	= robotMotions_[robotMotions_.size () - 1]->lastSample ()
 	->configuration;
       setFinalRobotPosition (finalConfiguration);
@@ -232,7 +228,8 @@ namespace hpp
 	      motionSample_t motionSample;
 	      robotMotion->getSampleAtTime (sampleTime, motionSample);
 
-	      const T sampleConfiguration = motionSample.configuration;
+	      const vectorN sampleConfiguration
+		= motionSample.configuration;
 	      
 	      // Retrieve foot, CoM, and posture values for sample.
 	      walk::HomogeneousMatrix3d sampleLeftFootPosition;
