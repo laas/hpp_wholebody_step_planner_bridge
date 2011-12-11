@@ -37,7 +37,7 @@ PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-wholebody-step-planner)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 
 rosbuild_add_executable(trajectory-writer src/trajectory-writer.cc)
-#target_link_libraries(example ${PROJECT_NAME})
+target_link_libraries(trajectory-writer ${PROJECT_NAME})
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer KineoController)
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer robotbuilder)
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer hpp-wholebody-step-planner)
