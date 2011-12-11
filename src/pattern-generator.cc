@@ -12,12 +12,8 @@ namespace hpp
 {
   namespace wholeBodyStepPlanner
   {
-    PatternGenerator::PatternGenerator (const robot_t& robot,
-					const robotMotions_t& robotMotions,
-					const planner_t& planner)
+    PatternGenerator::PatternGenerator (const planner_t& planner)
       : walk::PatternGenerator2d (),
-	robot_ (robot),
-	robotMotions_ (robotMotions),
 	planner_(planner)
     {
     }
@@ -26,36 +22,18 @@ namespace hpp
     {
     }
     
-    const robot_t& 
-    PatternGenerator::robot () const
+    const planner_t&
+    PatternGenerator::planner () const
     {
-      return robot_;
-    }
-
-    void
-    PatternGenerator::robot (const robot_t& robot)
-    {
-      robot_ = robot;
-    }
-
-    const robotMotions_t&
-    PatternGenerator::robotMotions () const
-    {
-      return robotMotions_;
+      return planner_;
     }
     
     void
-    PatternGenerator::robotMotions (const robotMotions_t& robotMotions)
+    PatternGenerator::planner (const planner_t& planner)
     {
-      robotMotions_ = robotMotions;
+      planner_ = planner;
     }
 
-    void
-    PatternGenerator::setInitAndGoalConfig (const path_t& path)
-    {
-      planner_->initAndGoalConfig (path);
-      planner_->initializeProblem ();
-    }
 
     void
     PatternGenerator::planTrajectories ()
@@ -95,10 +73,10 @@ namespace hpp
     {
       vector3d anklePositionInFootFrame;
       if (isLeftFoot)
-	robot_->robot ()->leftFoot ()
+	planner_->robot ()->robot ()->leftFoot ()
 	  ->getAnklePositionInLocalFrame (anklePositionInFootFrame);
       else
-	robot_->robot ()->rightFoot ()
+	planner_->robot ()->robot ()->rightFoot ()
 	  ->getAnklePositionInLocalFrame (anklePositionInFootFrame);
 
       walk::HomogeneousMatrix3d ankleTransformInFootFrame;
@@ -107,10 +85,10 @@ namespace hpp
 
       matrix4d ankleCurrentTransformation;
       if (isLeftFoot)
-	ankleCurrentTransformation = robot_->robot ()->leftAnkle ()
+	ankleCurrentTransformation = planner_->robot ()->robot ()->leftAnkle ()
 	  ->currentTransformation ();
       else
-	ankleCurrentTransformation = robot_->robot ()->rightAnkle ()
+	ankleCurrentTransformation = planner_->robot ()->robot ()->rightAnkle ()
 	  ->currentTransformation ();
 
       walk::HomogeneousMatrix3d ankleTransformInAbsoluteFrame;
@@ -129,7 +107,7 @@ namespace hpp
      walk::Vector3d& centerOfMassPosition,
      walk::Posture& posture)
     {
-      robot_->staticState (configuration);
+      planner_->robot ()->staticState (configuration);
 
       setRobotFootPosition (true, leftFootPosition);
 
@@ -146,11 +124,11 @@ namespace hpp
       // 			      supportPolygon->rightFootprint ()->th ());
 
       walk::convertToVector3d (centerOfMassPosition,
-			       robot_->robot ()->positionCenterOfMass ());
+			       planner_->robot ()->robot ()->positionCenterOfMass ());
       
       // Fill posture with additionnal dofs in upper body excluding the
       // free-flyer.
-      vectorN ubMask = robot_->maskFactory ()->upperBodyMask ();
+      vectorN ubMask = planner_->robot ()->maskFactory ()->upperBodyMask ();
 
       posture.resize (ubMask.size ());
       posture.setZero ();
@@ -208,19 +186,19 @@ namespace hpp
 
       // Fill initial posture information.
       vectorN initialConfiguration
-	= robotMotions_[0]->firstSample ()->configuration;
+	= planner_->robotMotions ()[0]->firstSample ()->configuration;
       setInitialRobotPosition (initialConfiguration);
 
       // Fill final posture information.
       vectorN finalConfiguration
-	= robotMotions_[robotMotions_.size () - 1]->lastSample ()
+	= planner_->robotMotions ()[planner_->robotMotions ().size () - 1]->lastSample ()
 	->configuration;
       setFinalRobotPosition (finalConfiguration);
       
       // Fill trajectories information.
-      for (unsigned motionId = 0; motionId < robotMotions_.size (); ++motionId)
+      for (unsigned motionId = 0; motionId < planner_->robotMotions ().size (); ++motionId)
 	{
-	  robotMotion_t robotMotion = robotMotions_[motionId];
+	  robotMotion_t robotMotion = planner_->robotMotions ()[motionId];
 
 	  for (double sampleTime = robotMotion->startTime ();
 	       sampleTime < robotMotion->endTime ();

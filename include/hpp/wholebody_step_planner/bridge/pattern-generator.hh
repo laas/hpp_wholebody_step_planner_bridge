@@ -18,12 +18,10 @@ namespace hpp
 {
   namespace wholeBodyStepPlanner
   {
-    typedef ChppGikStandingRobot* robot_t;
     typedef ChppGikSupportPolygon* supportPolygon_t;
     typedef ChppRobotMotion* robotMotion_t;
     typedef ChppRobotMotionSample motionSample_t;
     typedef Planner* planner_t;
-    typedef CkwsPathShPtr path_t;
     typedef ChppGikFootprint* footprint_t;
 
     // Container for a concatenation of whole-body robot trajectories
@@ -33,18 +31,13 @@ namespace hpp
     class PatternGenerator : public walk::PatternGenerator2d
     {
     public:
-      explicit PatternGenerator (const robot_t& robot,
-				 const robotMotions_t& robotMotions);
+      explicit PatternGenerator (const planner_t& planner);
 
       virtual ~PatternGenerator ();
 
-      const robot_t& robot () const;
+      const planner_t& planner () const;
 
-      void robot (const robot_t& robot);
-
-      const robotMotions_t& robotMotions () const;
-
-      void robotMotions (const robotMotions_t& robotMotions);
+      void planner (const planner_t& planner);
 
       void
       setRobotFootPosition (const bool isLeftFoot,
@@ -65,10 +58,6 @@ namespace hpp
       void computeTrajectories ();
 
     private:
-      robot_t robot_;
-
-      robotMotions_t robotMotions_;
-
       planner_t planner_;
     };
   } // end of namespace hpp.
