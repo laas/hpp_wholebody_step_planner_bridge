@@ -204,6 +204,8 @@ namespace hpp
     void
     PatternGenerator::computeTrajectories ()
     {
+      using namespace boost::posix_time;
+
       // Fill initial posture information.
       vectorN initialConfiguration
 	= robotMotions_[0]->firstSample ()->configuration;
@@ -246,7 +248,7 @@ namespace hpp
 	      // Fill foot, CoM, and posture trajectories.
 	      walk::StampedPosition3d stampedSampleLeftFootPosition;
 	      stampedSampleLeftFootPosition.duration
-		= robotMotion->samplingPeriod ();
+		= milliseconds (robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleLeftFootPosition.position
 		= sampleLeftFootPosition;
 	      leftFootTrajectory ().data ()
@@ -254,7 +256,7 @@ namespace hpp
  
 	      walk::StampedPosition3d stampedSampleRightFootPosition;
 	      stampedSampleRightFootPosition.duration
-		= robotMotion->samplingPeriod ();
+		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleRightFootPosition.position
 		= sampleRightFootPosition;
 	      rightFootTrajectory ().data ()
@@ -262,7 +264,7 @@ namespace hpp
 
 	      walk::StampedVector3d stampedSampleCenterOfMassPosition;
 	      stampedSampleCenterOfMassPosition.duration
-		= robotMotion->samplingPeriod ();
+		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleCenterOfMassPosition.position
 		= sampleCenterOfMassPosition;
 	      centerOfMassTrajectory ().data ()
@@ -270,7 +272,7 @@ namespace hpp
 
 	      walk::StampedVectorNd stampedSamplePosture;
 	      stampedSamplePosture.duration
-		= robotMotion->samplingPeriod ();
+		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSamplePosture.position
 		= samplePosture;
 	      postureTrajectory ().data ()
@@ -279,7 +281,7 @@ namespace hpp
 	      // Fill ZMP trajectory.
 	      walk::StampedVector2d stampedZMP;
 	      stampedZMP.duration
-		= robotMotion->samplingPeriod ();
+		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      walk::convertToVector2d (stampedZMP.position,
 				       motionSample.ZMPworPla);
 	      zmpTrajectory ().data ()
