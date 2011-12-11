@@ -251,7 +251,7 @@ namespace hpp
 		= milliseconds (robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleLeftFootPosition.position
 		= sampleLeftFootPosition;
-	      leftFootTrajectory ().data ()
+	      getLeftFootTrajectory ().data ()
 		.push_back (stampedSampleLeftFootPosition);
  
 	      walk::StampedPosition3d stampedSampleRightFootPosition;
@@ -259,7 +259,7 @@ namespace hpp
 		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleRightFootPosition.position
 		= sampleRightFootPosition;
-	      rightFootTrajectory ().data ()
+	      getRightFootTrajectory ().data ()
 		.push_back (stampedSampleRightFootPosition);
 
 	      walk::StampedVector3d stampedSampleCenterOfMassPosition;
@@ -267,7 +267,7 @@ namespace hpp
 		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSampleCenterOfMassPosition.position
 		= sampleCenterOfMassPosition;
-	      centerOfMassTrajectory ().data ()
+	      getCenterOfMassTrajectory ().data ()
 		.push_back (stampedSampleCenterOfMassPosition);
 
 	      walk::StampedVectorNd stampedSamplePosture;
@@ -275,7 +275,7 @@ namespace hpp
 		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      stampedSamplePosture.position
 		= samplePosture;
-	      postureTrajectory ().data ()
+	      getPostureTrajectory ().data ()
 		.push_back (stampedSamplePosture);
 
 	      // Fill ZMP trajectory.
@@ -284,7 +284,7 @@ namespace hpp
 		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      walk::convertToVector2d (stampedZMP.position,
 				       motionSample.ZMPworPla);
-	      zmpTrajectory ().data ()
+	      getZmpTrajectory ().data ()
 		.push_back (stampedZMP);
 	    }
 	}
