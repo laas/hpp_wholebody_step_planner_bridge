@@ -60,6 +60,8 @@ namespace hpp
 
       void setFinalRobotPosition (const vectorN& configuration);
 
+    protected:
+
       void computeTrajectories ();
 
     private:
