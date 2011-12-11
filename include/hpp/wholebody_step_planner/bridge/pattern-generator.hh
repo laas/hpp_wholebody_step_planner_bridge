@@ -50,20 +50,16 @@ namespace hpp
       setRobotFootPosition (const bool isLeftFoot,
 			    walk::HomogeneousMatrix3d& footPosition);
 
-      template <class T>
-      void setRobotPosition (const T& configuration,
+      void setRobotPosition (const vectorN& configuration,
 			     walk::HomogeneousMatrix3d& leftFootPosition,
 			     walk::HomogeneousMatrix3d& rightFootPosition,
 			     walk::Vector3d& centerOfMassPosition,
 			     walk::Posture& posture);
       
-      template <class T>
-      void setInitialRobotPosition (const T& configuration);
+      void setInitialRobotPosition (const vectorN& configuration);
 
-      template <class T>
-      void setFinalRobotPosition (const T& configuration);
+      void setFinalRobotPosition (const vectorN& configuration);
 
-      template <class T>
       void computeTrajectories ();
 
     private:
