@@ -16,6 +16,7 @@ rosbuild_add_boost_directories()
 ADD_REQUIRED_DEPENDENCY("eigen3")
 ADD_REQUIRED_DEPENDENCY("hpp-gik")
 ADD_REQUIRED_DEPENDENCY("KineoController")
+ADD_REQUIRED_DEPENDENCY("robotbuilder")
 ADD_REQUIRED_DEPENDENCY("hpp-wholebody-step-planner")
 
 #uncomment if you have defined messages
@@ -37,4 +38,6 @@ PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-wholebody-step-planner)
 
 rosbuild_add_executable(trajectory-writer src/trajectory-writer.cc)
 #target_link_libraries(example ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(trajectory-writer KineoController)
+PKG_CONFIG_USE_DEPENDENCY(trajectory-writer robotbuilder)
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer hpp-wholebody-step-planner)
