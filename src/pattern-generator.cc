@@ -206,18 +206,30 @@ namespace hpp
       for (unsigned motionId = 0; motionId < planner_->robotMotions ().size (); ++motionId)
 	{
 	  robotMotion_t robotMotion = planner_->robotMotions ()[motionId];
+	  const ChppRobotMotionSample * motionSample
+	    = robotMotion->firstSample ();
 
-	  for (double sampleTime = robotMotion->startTime ();
-	       sampleTime < robotMotion->endTime ();
-	       sampleTime += robotMotion->samplingPeriod ())
+	  while (motionSample)
 	    {
-	      // Retrieve motion sample and sample configuration.
-	      motionSample_t motionSample;
-	      robotMotion->getSampleAtTime (sampleTime, motionSample);
-
-	      const vectorN sampleConfiguration
-		= motionSample.configuration;
+	      // Retrieve sample configuration and convert it to
+	      // OpenHRP format.
+	      std::vector<double>
+		kineoCfg (planner_->humanoidRobot ()->countDofs ());
+	      std::vector<double>
+		openHrpCfg (planner_->humanoidRobot ()
+			    ->countDofs ());
 	      
+	      planner_->humanoidRobot ()->jrlDynamicsToKwsDofValues
+		(motionSample->configuration, kineoCfg);
+	      planner_->kwsToOpenHrpDofValues (kineoCfg,
+					      openHrpCfg);
+	      vectorN sampleConfiguration (planner_->humanoidRobot ()
+					   ->countDofs ());
+	      for (unsigned i = 0;
+		   i < planner_->humanoidRobot ()->countDofs ();
+		   ++i)
+		sampleConfiguration[i] = openHrpCfg[i];
+
 	      // Retrieve foot, CoM, and posture values for sample.
 	      walk::HomogeneousMatrix3d sampleLeftFootPosition;
 	      walk::HomogeneousMatrix3d sampleRightFootPosition;
@@ -268,9 +280,12 @@ namespace hpp
 	      stampedZMP.duration
 		= milliseconds(robotMotion->samplingPeriod () * 1e3);
 	      walk::convertToVector2d (stampedZMP.position,
-				       motionSample.ZMPworPla);
+				       motionSample->ZMPworPla);
 	      getZmpTrajectory ().data ()
 		.push_back (stampedZMP);
+
+	      // Iterate motion sample.
+	      motionSample = robotMotion->nextSample ();
 	    }
 	}
     }
