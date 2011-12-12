@@ -20,7 +20,7 @@ namespace hpp
   {
     typedef ChppGikSupportPolygon* supportPolygon_t;
     typedef ChppRobotMotion* robotMotion_t;
-    typedef ChppRobotMotionSample motionSample_t;
+    typedef ChppRobotMotionSample* motionSample_t;
     typedef Planner* planner_t;
     typedef ChppGikFootprint* footprint_t;
 
