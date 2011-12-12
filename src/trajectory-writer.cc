@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
   CkwsConfigShPtr config2;
   planner->humanoidRobot ()->getCurrentConfig (config2);
-  config2->dofValue (0, 1.5);
+  config2->dofValue (0, 0.2);
   configVector.push_back (config2);
 
   CkwsPathShPtr path
@@ -107,7 +107,22 @@ int main(int argc, char *argv[])
 
   planner->findDynamicPath (path);
 
-  delete planner;
+  // Create instance of pattern generator.
+
+  PatternGenerator patternGenerator (planner);
+
+  assert (!!patternGenerator.planner ());
+  assert (patternGenerator.planner ()->robotMotions ().size () != 0);
+  assert (!!patternGenerator.planner ()->robotMotions ()[0]);
+  assert (!!patternGenerator.planner ()->robotMotions ()[0]
+	  ->firstSample ());
+
+  // Compute trajectories in pattern generator using planner motion.
+
+  PatternGenerator::footprints_t footprints;
+  patternGenerator.setFootprints (footprints, false);
+  
+  std::cout << patternGenerator << std::endl;
 
   return 0;
 }
