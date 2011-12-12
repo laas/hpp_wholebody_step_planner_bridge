@@ -129,13 +129,20 @@ namespace hpp
       // Fill posture with additionnal dofs in upper body excluding the
       // free-flyer.
       vectorN ubMask = planner_->robot ()->maskFactory ()->upperBodyMask ();
+      for (unsigned dofId = 0; dofId < 6; ++dofId)
+	ubMask[dofId] = 0;
 
-      posture.resize (ubMask.size ());
+      unsigned activeDofNb = 0;
+      for (unsigned dofId = 0; dofId < ubMask.size (); ++dofId)
+	if (ubMask[dofId])
+	  ++activeDofNb;
+
+      // Resize posture to upper body dof numbers (size - 6 - 6 -6).
+      posture.resize (ubMask.size () - 18);
       posture.setZero ();
       
-      for (unsigned dofId = 6; dofId < ubMask.size (); ++dofId)
-	if (ubMask[dofId])
-	  posture[dofId] = configuration[dofId];
+      for (unsigned dofId = 18; dofId < ubMask.size (); ++dofId)
+	posture[dofId - 18] = configuration[dofId];
     }
       
     void 
