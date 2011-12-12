@@ -22,7 +22,7 @@ namespace hpp
     typedef ChppRobotMotion* robotMotion_t;
     typedef ChppRobotMotionSample* motionSample_t;
     typedef Planner* planner_t;
-    typedef ChppGikFootprint* footprint_t;
+    typedef ChppGikFootprint* hppFootprint_t;
 
     // Container for a concatenation of whole-body robot trajectories
     // that form the entire dynamic trajectory.
