@@ -114,8 +114,7 @@ int main(int argc, char *argv[])
   assert (!!patternGenerator.planner ());
   assert (patternGenerator.planner ()->robotMotions ().size () != 0);
   assert (!!patternGenerator.planner ()->robotMotions ()[0]);
-  assert (!!patternGenerator.planner ()->robotMotions ()[0]
-	  ->firstSample ());
+  assert (!patternGenerator.planner ()->robotMotions ()[0]->empty ());
 
   // Compute trajectories in pattern generator using planner motion.
 
