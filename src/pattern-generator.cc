@@ -34,36 +34,147 @@ namespace hpp
       planner_ = planner;
     }
 
+    void
+    PatternGenerator::computeStepParameters
+    (const hppFootprint_t hppFootprint,
+     const double samplingPeriod,
+     double& zmpEndShiftTime,
+     double& zmpStartShiftTime,
+     double& footFlightTime)
+    {
+      double stepFrac
+	= planner_->stepFracOfFootprint ()[hppFootprint];
+      zmpEndShiftTime = stepFrac * planner_->zmpEndShiftTime ();
+      zmpStartShiftTime = stepFrac * planner_->zmpStartShiftTime ();
+      footFlightTime = stepFrac * planner_->footFlightTime ();
+      footFlightTime = ((int) (footFlightTime / samplingPeriod) +1)
+	* samplingPeriod;
+      zmpStartShiftTime
+	= ((int) (zmpStartShiftTime / samplingPeriod) +1) * samplingPeriod;
+      zmpEndShiftTime
+	= ((int) (zmpEndShiftTime / samplingPeriod) +1) * samplingPeriod;
+    }
 
     void
-    PatternGenerator::planTrajectories ()
+    PatternGenerator::computeFootprintsAndTrajectories ()
     {
-      if (KD_OK == planner_->solveOneProblem (0))
-	if (KD_OK == planner_->findDynamicPath
-	    (planner_->getPath (0, planner_->getNbPaths (0) - 1)))
-	  {
-	    // Initialize empty footsteps sequence.
-	    walk::footsteps_t footsteps ();
+      // Initialize empty footsteps sequence.
+      PatternGenerator::footprints_t footprints;
 
-	    // Cycle through footprints provide by planner and build
-	    // footsteps sequence.
-	    for (unsigned footprintOfParamId = 0;
-		 footprintOfParamId < planner_->resultFootprints_.size ();
-		 ++footprintOfParamId)
-	      {
-		footprintOfParam_t footprintOfParam
-		  = planner_->resultFootprints_[footprintOfParamId];
-		
-		for (footprintOfParam_t::iterator it = footprintOfParam.begin ();
-		     it != footprintOfParam.end ();
-		     ++it)
-		  {
-		    footprint_t footprint = (*it).second;
-		    walk::footstep_t footstep;
-		  }
-	      }
-	    setSteps (footsteps, false);
-	  }
+      // Cycle through footprints provided by planner and build
+      // footprint sequence.
+      for (unsigned footprintsId = 0;
+	   footprintsId < planner_->resultFootprints ().size ();
+	   ++footprintsId)
+	{
+	  using namespace boost::posix_time;
+	  using namespace boost::gregorian;
+
+	  Planner::footprintOfParam_t hppFootprints
+	    = planner_->resultFootprints ()[footprintsId];
+
+	  std::map<double,double> paramOfTime = planner_->paramOfTime ();
+	  std::map<double,double>::iterator paramOfTimeIt
+	    = ++paramOfTime.begin ();
+
+	  date motionStartDate = day_clock::local_day();
+	  double samplingPeriod = 0.005;
+
+	  for (Planner::footprintOfParam_t::iterator it
+		 = hppFootprints.begin ();
+	       it != hppFootprints.end ();
+	       ++it)
+	    {
+	      hppFootprint_t hppFootprint1= (*it).second;
+	      PatternGenerator::footprint_t footprint;
+
+	      // Compute step parameters for footprint.
+	      double zmpEndShiftTime1 = 0;
+	      double zmpStartShiftTime1 = 0;
+	      double footFlightTime1 = 0;
+
+	      computeStepParameters (hppFootprint1,
+				     samplingPeriod,
+				     zmpEndShiftTime1,
+				     zmpStartShiftTime1,
+				     footFlightTime1);
+
+	      // Fill footprint begin time and create Time object by
+	      // adding offset to motion begin date.
+	      //
+	      // Time value in paramOfTime corresponds to the previous
+	      // step end, including the zmpshift time to the center
+	      // of the support polygon. The zmp end shift time hence
+	      // needs to be subtracted.
+	      walk::TimeDuration beginTimeFromStart
+		= milliseconds
+		(((* ++paramOfTimeIt).first - zmpEndShiftTime1)
+		 * 1e3);
+
+	      footprint.beginTime
+		= walk::Time (motionStartDate, beginTimeFromStart);
+
+	      // Fill footprint duration by adding up zmp shift times
+	      // over three successive steps (during which the current
+	      // foot is on the ground).
+	      walk::TimeDuration duration = milliseconds (0);
+	      duration += milliseconds (zmpEndShiftTime1 * 1e3);
+
+	      ++it;
+	      if (it != hppFootprints.end ())
+		{
+		  hppFootprint_t hppFootprint2 = (*it).second;
+
+		  double zmpEndShiftTime2 = 0;
+		  double zmpStartShiftTime2 = 0;
+		  double footFlightTime2 = 0;
+
+		  computeStepParameters (hppFootprint2,
+					 samplingPeriod,
+					 zmpEndShiftTime2,
+					 zmpStartShiftTime2,
+					 footFlightTime2);
+
+		  duration += milliseconds ((zmpEndShiftTime2
+					     + zmpStartShiftTime2
+					     + footFlightTime2) * 1e3);
+
+		  ++it;
+		  if (it != hppFootprints.end ())
+		    {
+		      hppFootprint_t hppFootprint3 = (*it).second;
+
+		      double zmpEndShiftTime3 = 0;
+		      double zmpStartShiftTime3 = 0;
+		      double footFlightTime3 = 0;
+
+		      computeStepParameters (hppFootprint3,
+					     samplingPeriod,
+					     zmpEndShiftTime3,
+					     zmpStartShiftTime3,
+					     footFlightTime3);
+
+		      duration += milliseconds (zmpStartShiftTime3 * 1e3);
+		    }
+		  --it;
+		}
+	      --it;
+
+	      footprint.duration = duration;
+
+	      // Fill footprint position.
+	      footprint.position[0] = hppFootprint1->x ();
+	      footprint.position[1] = hppFootprint1->y ();
+	      footprint.position[2] = hppFootprint1->th ();
+
+	      footprints.push_back (footprint);
+
+	      std::cout << footprint << std::endl;
+	    }
+	}
+
+      // Set Footprints and trajectories. Start with right foot.
+      setFootprints (footprints, false);
     }
 
     void

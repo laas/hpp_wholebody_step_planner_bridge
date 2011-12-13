@@ -118,10 +118,7 @@ int main(int argc, char *argv[])
 
   // Compute trajectories in pattern generator using planner motion.
 
-  PatternGenerator::footprints_t footprints;
-  patternGenerator.setFootprints (footprints, false);
+  patternGenerator.computeFootprintsAndTrajectories ();
   
-  std::cout << patternGenerator << std::endl;
-
   return 0;
 }

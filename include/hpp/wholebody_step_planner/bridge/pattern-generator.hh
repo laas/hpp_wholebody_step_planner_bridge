@@ -53,7 +53,15 @@ namespace hpp
 
       void setFinalRobotPosition (const vectorN& configuration);
 
+      void computeFootprintsAndTrajectories ();
+
     protected:
+
+      void computeStepParameters (const hppFootprint_t hppFootprint,
+				  const double samplingPeriod,
+				  double& zmpEndShiftTime,
+				  double& zmpStartShiftTime,
+				  double& footFlightTime);
 
       void computeTrajectories ();
 
