@@ -168,8 +168,6 @@ namespace hpp
 	      footprint.position[2] = hppFootprint1->th ();
 
 	      footprints.push_back (footprint);
-
-	      std::cout << footprint << std::endl;
 	    }
 	}
 
