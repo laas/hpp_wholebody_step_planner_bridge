@@ -9,6 +9,8 @@
 #include <kwsIO/kwsioConfig.h>
 #include <hpp/wholebody-step-planner/planner.hh>
 
+#include <walk_interfaces/yaml.hh>
+
 #include "hpp/wholebody_step_planner/bridge/pattern-generator.hh"
 
 #include "load-hrp2.cc"
@@ -119,6 +121,12 @@ int main(int argc, char *argv[])
   // Compute trajectories in pattern generator using planner motion.
 
   patternGenerator.computeFootprintsAndTrajectories ();
+
+  // Create yaml writer and export pattern generator with trajectories.
+
+  walk::YamlWriter<PatternGenerator> yamlWriter (patternGenerator);
+
+  yamlWriter.write ("./walk.yaml");
   
   return 0;
 }
