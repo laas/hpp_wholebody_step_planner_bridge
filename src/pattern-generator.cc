@@ -299,12 +299,14 @@ namespace hpp
 
       // Fill final posture information.
       vectorN finalConfiguration
-	= planner_->robotMotions ()[planner_->robotMotions ().size () - 1]->lastSample ()
-	->configuration;
+	= planner_->robotMotions ()[planner_->robotMotions ().size () - 1]
+	->lastSample ()->configuration;
       setFinalRobotPosition (finalConfiguration);
-      
+
       // Fill trajectories information.
-      for (unsigned motionId = 0; motionId < planner_->robotMotions ().size (); ++motionId)
+      for (unsigned motionId = 0;
+	   motionId < planner_->robotMotions ().size ();
+	   ++motionId)
 	{
 	  robotMotion_t robotMotion = planner_->robotMotions ()[motionId];
 	  const ChppRobotMotionSample * motionSample
