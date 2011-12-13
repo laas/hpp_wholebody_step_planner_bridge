@@ -184,10 +184,10 @@ namespace hpp
     {
       vector3d anklePositionInFootFrame;
       if (isLeftFoot)
-	planner_->robot ()->robot ()->leftFoot ()
+	planner_->humanoidRobot ()->leftFoot ()
 	  ->getAnklePositionInLocalFrame (anklePositionInFootFrame);
       else
-	planner_->robot ()->robot ()->rightFoot ()
+	planner_->humanoidRobot ()->rightFoot ()
 	  ->getAnklePositionInLocalFrame (anklePositionInFootFrame);
 
       walk::HomogeneousMatrix3d ankleTransformInFootFrame;
@@ -196,11 +196,11 @@ namespace hpp
 
       matrix4d ankleCurrentTransformation;
       if (isLeftFoot)
-	ankleCurrentTransformation = planner_->robot ()->robot ()->leftAnkle ()
-	  ->currentTransformation ();
+	ankleCurrentTransformation = planner_->humanoidRobot ()
+	  ->leftAnkle ()->currentTransformation ();
       else
-	ankleCurrentTransformation = planner_->robot ()->robot ()->rightAnkle ()
-	  ->currentTransformation ();
+	ankleCurrentTransformation = planner_->humanoidRobot ()
+	  ->rightAnkle ()->currentTransformation ();
 
       walk::HomogeneousMatrix3d ankleTransformInAbsoluteFrame;
       walk::convertToTrans3d (ankleTransformInAbsoluteFrame,
@@ -218,24 +218,14 @@ namespace hpp
      walk::Vector3d& centerOfMassPosition,
      walk::Posture& posture)
     {
-      planner_->robot ()->staticState (configuration);
+      planner_->humanoidRobot ()->hppSetCurrentConfig (configuration);
 
       setRobotFootPosition (true, leftFootPosition);
 
       setRobotFootPosition (false, rightFootPosition);
 
-      // walk::trans2dToTrans3d (leftFootPosition,
-      // 			      supportPolygon->leftFootprint ()->x (),
-      // 			      supportPolygon->leftFootprint ()->y (),
-      // 			      supportPolygon->leftFootprint ()->th ());
-      
-      // walk::trans2dToTrans3d (rightFootPosition,
-      // 			      supportPolygon->rightFootprint ()->x (),
-      // 			      supportPolygon->rightFootprint ()->y (),
-      // 			      supportPolygon->rightFootprint ()->th ());
-
       walk::convertToVector3d (centerOfMassPosition,
-			       planner_->robot ()->robot ()->positionCenterOfMass ());
+			       planner_->humanoidRobot ()->positionCenterOfMass ());
       
       // Fill posture with additionnal dofs in upper body excluding the
       // free-flyer.
@@ -262,14 +252,14 @@ namespace hpp
       walk::HomogeneousMatrix3d leftFootPosition;
       walk::HomogeneousMatrix3d rightFootPosition;
       walk::Vector3d centerOfMassPosition;
-      walk::Posture posture (configuration.size ());
+      walk::Posture posture;
 
       setRobotPosition (configuration,
 			leftFootPosition,
 			rightFootPosition,
 			centerOfMassPosition,
 			posture);
-      
+
       walk::PatternGenerator2d::setInitialRobotPosition 
 	(leftFootPosition,
 	 rightFootPosition,
@@ -290,7 +280,7 @@ namespace hpp
 			rightFootPosition,
 			centerOfMassPosition,
 			posture);
-      
+
       walk::PatternGenerator2d::setFinalRobotPosition(leftFootPosition,
 						      rightFootPosition,
 						      centerOfMassPosition,
