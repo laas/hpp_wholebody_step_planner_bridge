@@ -9,8 +9,16 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/hpp_wholebody_step_planner_bridge</url>
 
+  <depend package="common_rosdeps" />
+
   <depend package="walk_msgs"/>
   <depend package="walk_interfaces"/>
+
+  <depend package="bullet"/>
+
+  <depend package="visualization_msgs"/>
+
+  <depend package="angles"/>
 
   <rosdep name="boost"/>
 

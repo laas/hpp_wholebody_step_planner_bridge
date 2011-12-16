@@ -1,0 +1,102 @@
+Background\ ColorR=0
+Background\ ColorG=0
+Background\ ColorB=0
+Fixed\ Frame=/world
+Target\ Frame=<Fixed Frame>
+Grid.Alpha=0.5
+Grid.Cell\ Size=1
+Grid.ColorR=0.5
+Grid.ColorG=0.5
+Grid.ColorB=0.5
+Grid.Enabled=0
+Grid.Line\ Style=0
+Grid.Line\ Width=0.03
+Grid.Normal\ Cell\ Count=0
+Grid.OffsetX=0
+Grid.OffsetY=0
+Grid.OffsetZ=0
+Grid.Plane=0
+Grid.Plane\ Cell\ Count=10
+Grid.Reference\ Frame=<Fixed Frame>
+Interactive\ Markers.Enabled=0
+Interactive\ Markers.Show\ Axes=0
+Interactive\ Markers.Show\ Descriptions=1
+Interactive\ Markers.Show\ Tool\ Tips=1
+Interactive\ Markers.Update\ Topic=/planning_visualizer_controls/update
+MarkerArray.Enabled=1
+MarkerArray.Marker\ Array\ Topic=/halfsteps_pattern_generator/footprints
+MarkerArray.halfsteps_pattern_generator=1
+PCV\ Markers.Enabled=0
+PCV\ Markers.Marker\ Topic=/planning_components_visualizer
+Path.Alpha=1
+Path.ColorR=0.1
+Path.ColorG=1
+Path.ColorB=0
+Path.Enabled=1
+Path.Topic=/halfsteps_pattern_generator/zmp
+Path2.Alpha=1
+Path2.ColorR=0.1
+Path2.ColorG=1
+Path2.ColorB=0
+Path2.Enabled=1
+Path2.Topic=/halfsteps_pattern_generator/left_foot
+Path3.Alpha=1
+Path3.ColorR=0.1
+Path3.ColorG=1
+Path3.ColorB=0
+Path3.Enabled=1
+Path3.Topic=/halfsteps_pattern_generator/right_foot
+Path4.Alpha=1
+Path4.ColorR=0.1
+Path4.ColorG=1
+Path4.ColorB=0
+Path4.Enabled=1
+Path4.Topic=/halfsteps_pattern_generator/com
+Robot\ Model.Alpha=1
+Robot\ Model.Collision\ Enabled=1
+Robot\ Model.Enabled=0
+Robot\ Model.Robot\ Description=robot_description
+Robot\ Model.TF\ Prefix=
+Robot\ Model.Update\ Interval=0
+Robot\ Model.Visual\ Enabled=1
+Tool\ 2D\ Nav\ GoalTopic=goal
+Tool\ 2D\ Pose\ EstimateTopic=initialpose
+Camera\ Type=rviz::OrbitViewController
+Camera\ Config=1.346 4.31081 2.91182 0.515978 0.0314515 0.040266
+Property\ Grid\ State=selection=Path4.Enabled.Path4.Topic;expanded=.Global Options,Robot Model.Enabled,PCV Markers.Enabled.PCV Markers.Namespaces,Path.Enabled,MarkerArray.Enabled,MarkerArray.Enabled.MarkerArray.StatusTopStatus,MarkerArray.Enabled.MarkerArray.Namespaces,Path2.Enabled,Path3.Enabled,Path4.Enabled;scrollpos=0,14;splitterpos=150,285;ispageselected=1
+[Display0]
+Name=Grid
+Package=rviz
+ClassName=rviz::GridDisplay
+[Display1]
+Name=Robot Model
+Package=rviz
+ClassName=rviz::RobotModelDisplay
+[Display2]
+Name=PCV Markers
+Package=rviz
+ClassName=rviz::MarkerDisplay
+[Display3]
+Name=Interactive Markers
+Package=rviz
+ClassName=rviz::InteractiveMarkerDisplay
+[Display4]
+Name=Path
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display5]
+Name=MarkerArray
+Package=rviz
+ClassName=rviz::MarkerArrayDisplay
+[Display6]
+Name=Path2
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display7]
+Name=Path3
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display8]
+Name=Path4
+Package=rviz
+ClassName=rviz::PathDisplay

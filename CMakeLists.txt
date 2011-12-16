@@ -41,3 +41,10 @@ target_link_libraries(trajectory-writer ${PROJECT_NAME})
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer KineoController)
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer robotbuilder)
 PKG_CONFIG_USE_DEPENDENCY(trajectory-writer hpp-wholebody-step-planner)
+
+#Node.
+rosbuild_add_executable(generator src/nodes/generator.cpp)
+target_link_libraries(generator ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(generator KineoController)
+PKG_CONFIG_USE_DEPENDENCY(generator robotbuilder)
+PKG_CONFIG_USE_DEPENDENCY(generator hpp-wholebody-step-planner)

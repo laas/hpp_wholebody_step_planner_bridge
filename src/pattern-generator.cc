@@ -17,6 +17,12 @@ namespace hpp
 	planner_(planner)
     {
     }
+
+    PatternGenerator::PatternGenerator ()
+      : walk::PatternGenerator2d ()
+    {
+      planner_ = NULL;
+    }
     
     PatternGenerator::~PatternGenerator ()
     {

@@ -33,6 +33,8 @@ namespace hpp
     public:
       explicit PatternGenerator (const planner_t& planner);
 
+      PatternGenerator ();
+
       virtual ~PatternGenerator ();
 
       const planner_t& planner () const;
