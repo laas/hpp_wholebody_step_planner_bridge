@@ -232,9 +232,9 @@ namespace hpp
 			       planner_->humanoidRobot ()->positionCenterOfMass ());
       
       // Fill posture with additionnal dofs in upper body excluding the
-      // free-flyer.
+      // free-flyer but not the yaw.
       vectorN ubMask = planner_->robot ()->maskFactory ()->upperBodyMask ();
-      for (unsigned dofId = 0; dofId < 6; ++dofId)
+      for (unsigned dofId = 0; dofId < 5; ++dofId)
 	ubMask[dofId] = 0;
 
       unsigned activeDofNb = 0;
@@ -242,12 +242,13 @@ namespace hpp
 	if (ubMask[dofId])
 	  ++activeDofNb;
 
-      // Resize posture to upper body dof numbers (size - 6 - 6 -6).
-      posture.resize (ubMask.size () - 18);
+      // Resize posture to upper body dof numbers (size - 6 - 6 - 5).
+      posture.resize (ubMask.size () - 17);
       posture.setZero ();
       
+      posture[0] = configuration[5];
       for (unsigned dofId = 18; dofId < ubMask.size (); ++dofId)
-	posture[dofId - 18] = configuration[dofId];
+	posture[dofId - 17] = configuration[dofId];
     }
       
     void 
