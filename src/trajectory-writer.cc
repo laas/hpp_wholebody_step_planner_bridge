@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
   // Create planner instance and set footprint limits.
   Planner* planner = new Planner (0.05);
   
-  planner->setFootPrintLimits(-0.2,0.2,-0.25,-0.13,-M_PI /4,0.1);
+  planner->setFootPrintLimits(-0.17,0.17,-0.25,-0.13,-M_PI /4,0.1);
 
   // Build HRP-2 robot and load it in planner.
   ChppHumanoidRobotShPtr robot;
