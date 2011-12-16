@@ -83,7 +83,7 @@ namespace hpp
 	  std::map<double,double>::iterator paramOfTimeIt
 	    = ++paramOfTime.begin ();
 
-	  date motionStartDate = day_clock::local_day();
+	  date motionStartDate = date (1970, 1, 1);
 	  double samplingPeriod = 0.005;
 
 	  for (Planner::footprintOfParam_t::iterator it
