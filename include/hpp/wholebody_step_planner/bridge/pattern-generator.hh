@@ -45,11 +45,23 @@ namespace hpp
       setRobotFootPosition (const bool isLeftFoot,
 			    walk::HomogeneousMatrix3d& footPosition);
 
+      void
+      setRobotHandPosition (const bool isLeftHand,
+			    walk::HomogeneousMatrix3d& handPosition);
+
       void setRobotPosition (const vectorN& configuration,
 			     walk::HomogeneousMatrix3d& leftFootPosition,
 			     walk::HomogeneousMatrix3d& rightFootPosition,
 			     walk::Vector3d& centerOfMassPosition,
 			     walk::Posture& posture);
+
+      void setRobotPosition (const vectorN& configuration,
+			     walk::HomogeneousMatrix3d& leftFootPosition,
+			     walk::HomogeneousMatrix3d& rightFootPosition,
+			     walk::Vector3d& centerOfMassPosition,
+			     walk::Posture& posture,
+			     walk::HomogeneousMatrix3d& leftHand,
+			     walk::HomogeneousMatrix3d& rightHand);
       
       void setInitialRobotPosition (const vectorN& configuration);
 

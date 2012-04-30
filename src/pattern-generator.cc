@@ -213,6 +213,23 @@ namespace hpp
       footPosition = ankleTransformInAbsoluteFrame
 	* ankleTransformInFootFrame.inverse ();
     }
+
+    void
+    PatternGenerator::setRobotHandPosition
+    (const bool isLeftHand,
+     walk::HomogeneousMatrix3d& handPosition)
+    {
+      matrix4d handCurrentTransformation;
+      if (isLeftHand)
+	handCurrentTransformation = planner_->humanoidRobot ()
+	  ->leftWrist ()->currentTransformation ();
+      else
+	handCurrentTransformation = planner_->humanoidRobot ()
+	  ->rightWrist ()->currentTransformation ();
+
+      walk::convertToTrans3d (handPosition,
+			      handCurrentTransformation);
+    }
     
     void
     PatternGenerator::setRobotPosition
@@ -250,6 +267,27 @@ namespace hpp
       for (unsigned dofId = 18; dofId < ubMask.size (); ++dofId)
 	posture[dofId - 17] = configuration[dofId];
     }
+
+    void
+    PatternGenerator::setRobotPosition
+    (const vectorN& configuration,
+     walk::HomogeneousMatrix3d& leftFootPosition,
+     walk::HomogeneousMatrix3d& rightFootPosition,
+     walk::Vector3d& centerOfMassPosition,
+     walk::Posture& posture,
+     walk::HomogeneousMatrix3d& leftHand,
+     walk::HomogeneousMatrix3d& rightHand)
+    {
+      setRobotPosition (configuration,
+			leftFootPosition,
+			rightFootPosition,
+			centerOfMassPosition,
+			posture);
+
+      // Set Hands position.
+      setRobotHandPosition (true, leftHand);
+      setRobotHandPosition (false, rightHand);
+    }
       
     void 
     PatternGenerator::setInitialRobotPosition (const vectorN& configuration)
@@ -258,18 +296,24 @@ namespace hpp
       walk::HomogeneousMatrix3d rightFootPosition;
       walk::Vector3d centerOfMassPosition;
       walk::Posture posture;
+      walk::HomogeneousMatrix3d leftHandPosition;
+      walk::HomogeneousMatrix3d rightHandPosition;
 
       setRobotPosition (configuration,
 			leftFootPosition,
 			rightFootPosition,
 			centerOfMassPosition,
-			posture);
+			posture,
+			leftHandPosition,
+			rightHandPosition);
 
       walk::DiscretizedPatternGenerator2d::setInitialRobotPosition 
 	(leftFootPosition,
 	 rightFootPosition,
 	 centerOfMassPosition,
-	 posture);
+	 posture,
+	 leftHandPosition,
+	 rightHandPosition);
     }
 
     void
@@ -279,18 +323,24 @@ namespace hpp
       walk::HomogeneousMatrix3d rightFootPosition;
       walk::Vector3d centerOfMassPosition;
       walk::Posture posture (configuration.size ());
+      walk::HomogeneousMatrix3d leftHandPosition;
+      walk::HomogeneousMatrix3d rightHandPosition;
 
       setRobotPosition (configuration,
 			leftFootPosition,
 			rightFootPosition,
 			centerOfMassPosition,
-			posture);
+			posture,
+			leftHandPosition,
+			rightHandPosition);
 
       walk::DiscretizedPatternGenerator2d
 	::setFinalRobotPosition(leftFootPosition,
 				rightFootPosition,
 				centerOfMassPosition,
-				posture);
+				posture,
+				leftHandPosition,
+				rightHandPosition);
     }
     
     void
@@ -344,14 +394,18 @@ namespace hpp
 	      walk::HomogeneousMatrix3d sampleRightFootPosition;
 	      walk::Vector3d sampleCenterOfMassPosition;
 	      walk::Posture samplePosture;
+	      walk::HomogeneousMatrix3d sampleLeftHandPosition;
+	      walk::HomogeneousMatrix3d sampleRightHandPosition;
 
 	      setRobotPosition (sampleConfiguration,
 				sampleLeftFootPosition,
 				sampleRightFootPosition,
 				sampleCenterOfMassPosition,
-				samplePosture);
+				samplePosture,
+				sampleLeftHandPosition,
+				sampleRightHandPosition);
 	      
-	      // Fill foot, CoM, and posture trajectories.
+	      // Fill foot, CoM, posture, and hand trajectories.
 	      walk::StampedPosition3d stampedSampleLeftFootPosition;
 	      stampedSampleLeftFootPosition.duration
 		= milliseconds (robotMotion->samplingPeriod () * 1e3);
@@ -383,6 +437,22 @@ namespace hpp
 		= samplePosture;
 	      getPostureTrajectory ().data ()
 		.push_back (stampedSamplePosture);
+
+	      walk::StampedPosition3d stampedSampleLeftHandPosition;
+	      stampedSampleLeftHandPosition.duration
+		= milliseconds (robotMotion->samplingPeriod () * 1e3);
+	      stampedSampleLeftHandPosition.position
+		= sampleLeftHandPosition;
+	      getLeftHandTrajectory ().data ()
+		.push_back (stampedSampleLeftHandPosition);
+ 
+	      walk::StampedPosition3d stampedSampleRightHandPosition;
+	      stampedSampleRightHandPosition.duration
+		= milliseconds(robotMotion->samplingPeriod () * 1e3);
+	      stampedSampleRightHandPosition.position
+		= sampleRightHandPosition;
+	      getRightHandTrajectory ().data ()
+		.push_back (stampedSampleRightHandPosition);
 
 	      // Fill ZMP trajectory.
 	      walk::StampedVector2d stampedZMP;
