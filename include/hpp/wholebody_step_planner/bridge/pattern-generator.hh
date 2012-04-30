@@ -28,7 +28,7 @@ namespace hpp
     // that form the entire dynamic trajectory.
     typedef std::vector<robotMotion_t> robotMotions_t;
 
-    class PatternGenerator : public walk::PatternGenerator2d
+    class PatternGenerator : public walk::DiscretizedPatternGenerator2d
     {
     public:
       explicit PatternGenerator (const planner_t& planner);

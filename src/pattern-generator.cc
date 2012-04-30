@@ -13,13 +13,13 @@ namespace hpp
   namespace wholeBodyStepPlanner
   {
     PatternGenerator::PatternGenerator (const planner_t& planner)
-      : walk::PatternGenerator2d (),
+      : walk::DiscretizedPatternGenerator2d (),
 	planner_(planner)
     {
     }
 
     PatternGenerator::PatternGenerator ()
-      : walk::PatternGenerator2d ()
+      : walk::DiscretizedPatternGenerator2d ()
     {
       planner_ = NULL;
     }
@@ -265,7 +265,7 @@ namespace hpp
 			centerOfMassPosition,
 			posture);
 
-      walk::PatternGenerator2d::setInitialRobotPosition 
+      walk::DiscretizedPatternGenerator2d::setInitialRobotPosition 
 	(leftFootPosition,
 	 rightFootPosition,
 	 centerOfMassPosition,
@@ -286,10 +286,11 @@ namespace hpp
 			centerOfMassPosition,
 			posture);
 
-      walk::PatternGenerator2d::setFinalRobotPosition(leftFootPosition,
-						      rightFootPosition,
-						      centerOfMassPosition,
-						      posture);
+      walk::DiscretizedPatternGenerator2d
+	::setFinalRobotPosition(leftFootPosition,
+				rightFootPosition,
+				centerOfMassPosition,
+				posture);
     }
     
     void
